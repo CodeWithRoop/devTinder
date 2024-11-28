@@ -1,8 +1,36 @@
 const express = require("express");
 const app=express();
 
+
+//without using middleware-used authorization code multiple times
+//we can avoid using middleware
+app.get("/admin/getAllData",(req,res)=>{
+    const token ="xyz12";
+    const isAdminAuthorised=token==="xyz";
+    if(isAdminAuthorised)
+    {
+        console.log("All data sent");
+        res.send("All data sent");
+    }
+    else{
+        res.status(401).send("unathorized req-alldata");
+    }
+});
+
+app.get("/admin/deleteData",(req,res)=>{
+    const token ="xyz";
+    const isAdminAuthorised=token==="xyz";
+    if(isAdminAuthorised)
+    {
+        console.log("deleted user");
+        res.send("deleted user");
+    }
+    else{
+        res.status(401).send("unathorized req-deletedata");
+    }
+});
 //mutiple route handling
-app.use("/user",
+/* app.use("/user",
     (req,res,next)=>{
         console.log("handling the route user!!");  //middleware
         next();
@@ -23,9 +51,9 @@ app.use("/user",
         res.send("user3 response");
     }
 
-);
+); */
 
-app.get("/",
+/* app.get("/",
 
 (req,res,next)=>{
     console.log("we are handling first middleware");
@@ -50,7 +78,7 @@ app.get("/",
     next();
 }
 
-);
+); */
 
     
 //app.use("/test",(req,res)=>{res.send("USE handler tested!order matters in routing")});
