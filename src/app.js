@@ -4,30 +4,29 @@ const app=express();
 
 //without using middleware-used authorization code multiple times
 //we can avoid using middleware
-app.get("/admin/getAllData",(req,res)=>{
-    const token ="xyz12";
+
+app.use("/admin",(req,res,next)=>{
+    const token ="xyz";
     const isAdminAuthorised=token==="xyz";
-    if(isAdminAuthorised)
+    if(!isAdminAuthorised)
     {
-        console.log("All data sent");
-        res.send("All data sent");
-    }
-    else{
+        console.log("unathorized req");
         res.status(401).send("unathorized req-alldata");
     }
+    else{
+        next();
+    }
+})
+app.get("/admin/getAllData",(req,res)=>{
+    console.log("all data sent");
+        res.send("all data sent-using middleware");
 });
 
 app.get("/admin/deleteData",(req,res)=>{
-    const token ="xyz";
-    const isAdminAuthorised=token==="xyz";
-    if(isAdminAuthorised)
-    {
+
         console.log("deleted user");
-        res.send("deleted user");
-    }
-    else{
-        res.status(401).send("unathorized req-deletedata");
-    }
+        res.send("deleted user-using middleware");
+
 });
 //mutiple route handling
 /* app.use("/user",
