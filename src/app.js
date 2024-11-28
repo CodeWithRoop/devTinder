@@ -1,7 +1,27 @@
 const express = require("express");
 const app=express();
 
-const{adminAuth}=require("./middleware/auth");
+//wildcard error handling
+
+app.get("/getAllData",(req,res)=>{
+    throw new Error("vdhfgd");
+    console.log("sent all data");
+    res.send("sent all data");
+});
+
+//always write error handler at the end of code,as javascript runs line by line
+//sequence of param in route handler is very important
+//always err,req,res,next  
+//cant write like next,req,res,err
+//order matters in routing,error handling
+app.use("/",(err,req,res,next)=>{
+    if(err){
+        res.status(500).send("something went wrong");
+    }
+})
+
+
+/* const{adminAuth}=require("./middleware/auth");
 app.use("/admin",adminAuth);
 
 app.get("/admin/getAllData",(req,res)=>{
@@ -25,7 +45,7 @@ const{userAuth}=require("./middleware/auth");
 app.get("/user",userAuth,(req,res)=>{
     console.log("all data sent to user");
         res.send("all data sent-using middleware-with seperate folder-for user");
-});
+}); */
 
 
 //mutiple route handling
