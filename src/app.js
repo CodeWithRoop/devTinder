@@ -1,31 +1,18 @@
 const express = require("express");
 const app=express();
 
+const{adminAuth}=require("./middleware/auth");
+app.use("/admin",adminAuth);
 
-//without using middleware-used authorization code multiple times
-//we can avoid using middleware
-
-app.use("/admin",(req,res,next)=>{
-    const token ="xyz";
-    const isAdminAuthorised=token==="xyz";
-    if(!isAdminAuthorised)
-    {
-        console.log("unathorized req");
-        res.status(401).send("unathorized req-alldata");
-    }
-    else{
-        next();
-    }
-})
 app.get("/admin/getAllData",(req,res)=>{
     console.log("all data sent");
-        res.send("all data sent-using middleware");
+        res.send("all data sent-using middleware-with seperate folder");
 });
 
 app.get("/admin/deleteData",(req,res)=>{
 
         console.log("deleted user");
-        res.send("deleted user-using middleware");
+        res.send("deleted user-using middleware-with seperate folder");
 
 });
 //mutiple route handling
