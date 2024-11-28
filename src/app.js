@@ -15,6 +15,19 @@ app.get("/admin/deleteData",(req,res)=>{
         res.send("deleted user-using middleware-with seperate folder");
 
 });
+
+
+//another way of writting userauth
+
+const{userAuth}=require("./middleware/auth");
+//app.use("/user",adminAuth);
+
+app.get("/user",userAuth,(req,res)=>{
+    console.log("all data sent to user");
+        res.send("all data sent-using middleware-with seperate folder-for user");
+});
+
+
 //mutiple route handling
 /* app.use("/user",
     (req,res,next)=>{
