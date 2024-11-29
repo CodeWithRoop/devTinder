@@ -41,6 +41,20 @@ app.get("/feed",async(req,res)=>{
     }
 })
 
+//Delete record using findByIdDelete
+
+app.delete("/user",async(req,res)=>{
+const userId = req.body.userId;
+console.log(userId);
+try{
+    const user = await User.findByIdAndDelete(userId);
+    res.send("user is deleted successfully!");
+}
+catch(err){
+    res.status(404).send("something went wrong");
+}
+})
+
 
 
 
