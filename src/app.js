@@ -2,7 +2,7 @@ const express = require("express");
 const connectDB=require("./config/database");
 const User =require("./models/user");
 const app=express();
-app.use(express.json()); // Convert JSON to javscript object
+app.use(express.json()); // Its middleware , It Converts JSON to javscript object
 app.post("/signup",async(req,res)=>{
     //console.log(req.body);
     const user = new User(req.body);
@@ -13,6 +13,22 @@ app.post("/signup",async(req,res)=>{
         }
    
 });
+
+app.get("/user",async(req,res)=>{
+    const userEmail = req.body.emailId;
+    //console.log(userEmail);
+    try{
+        if(userEmail===0){
+            res.status(404).send("user not found");
+        }
+        else{
+            const users=await User.find({emailId:userEmail}); 
+            res.send(users);
+        }
+    }catch(err){
+        res.status(404).send("something went wrong");
+    }
+})
 
 
 
