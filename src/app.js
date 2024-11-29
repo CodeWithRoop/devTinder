@@ -1,9 +1,12 @@
 const express = require("express");
+require("./config/database");
 const app=express();
-
+app.listen(3002,()=>{
+    console.log("server is successfully listening on port 3002...");
+});
 //wildcard error handling
 
-app.get("/getAllData",(req,res)=>{
+/* app.get("/getAllData",(req,res)=>{
     throw new Error("vdhfgd");
     console.log("sent all data");
     res.send("sent all data");
@@ -18,7 +21,7 @@ app.use("/",(err,req,res,next)=>{
     if(err){
         res.status(500).send("something went wrong");
     }
-})
+}) */
 
 
 /* const{adminAuth}=require("./middleware/auth");
@@ -115,6 +118,3 @@ app.get("/user",userAuth,(req,res)=>{
 
 
 
-app.listen(3002,()=>{
-    console.log("server is successfully listening on port 3002...");
-});
