@@ -1,9 +1,18 @@
 const express = require("express");
-require("./config/database");
+const connectDB=require("./config/database");
 const app=express();
-app.listen(3002,()=>{
-    console.log("server is successfully listening on port 3002...");
+
+connectDB().then(()=>{
+    console.log("database conencted");
+    app.listen(3002,()=>{
+        console.log("server is successfully listening on port 3002...");
+    });
+})
+.catch((err)=>{
+    console.log("database conn't be connected!");
 });
+
+
 //wildcard error handling
 
 /* app.get("/getAllData",(req,res)=>{
