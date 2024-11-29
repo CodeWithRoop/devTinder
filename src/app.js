@@ -57,7 +57,7 @@ catch(err){
 
 //update user record using findByIdAndUpdate
 
-app.patch("/user",async(req,res)=>{
+app.patch("/user1",async(req,res)=>{
     const userId= req.body.userId;
     const data=req.body;
 
@@ -68,12 +68,27 @@ app.patch("/user",async(req,res)=>{
     catch(err){
         res.status(404).send("something went wrong");
 
-    }
+    }  
+   
+}) 
 
-    
+//exploring update record=returnDocument:before
+
+app.patch("/user",async(req,res)=>{
+    const userId= req.body.userId;
+    const data=req.body;
+
+    try{
+        const user= await User.findByIdAndUpdate({_id:userId},data,{returnDocument:"after",});
+        console.log(user);
+        res.send("user updated successfully!");
+    }
+    catch(err){
+        res.status(404).send("something went wrong");
+
+    }  
    
 })
-
 
 
 
