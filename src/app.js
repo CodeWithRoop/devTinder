@@ -30,6 +30,17 @@ app.get("/user",async(req,res)=>{
     }
 })
 
+//GET- /feed FETCH ALL USER FROM DATABASE
+app.get("/feed",async(req,res)=>{
+    try{
+        const users = await User.find({});
+        res.send(users);
+    }
+    catch(err){
+        res.status(404).send("something went wrong");
+    }
+})
+
 
 
 
