@@ -2,16 +2,10 @@ const express = require("express");
 const connectDB=require("./config/database");
 const User =require("./models/user");
 const app=express();
-
+app.use(express.json()); // Convert JSON to javscript object
 app.post("/signup",async(req,res)=>{
-    const user = new User({
-        firstName:"pavan",
-        lastName:"meti",
-        age:33,
-        emailId:"pavanm@gmail.com",
-        passWord:"hdfdsfkh",
-        gender:"male",
-    });
+    //console.log(req.body);
+    const user = new User(req.body);
 
     try{ await user.save();
         res.send("user added successfully!");}catch{
