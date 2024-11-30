@@ -8,8 +8,8 @@ app.post("/signup",async(req,res)=>{
     const user = new User(req.body);
 
     try{ await user.save();
-        res.send("user added successfully!");}catch{
-            res.status(400).send("something went wrong.",err.message);
+        res.send("user added successfully!");}catch(err){
+            res.status(400).send("something went wrong."+err.message);
         }
    
 });
@@ -80,25 +80,29 @@ app.patch("/user/:userId",async(req,res)=>{
     console.log(data);
     try{
 
-        const ALLOWED_UPDATES =["skills","about","gender","age"];
+        const ALLOWED_UPDATES =["skills","about","gender","age","photoUrl","passWord"];
 
         const isAllowedUpdates = Object.keys(data).every((k)=>ALLOWED_UPDATES.includes(k));
         console.log(isAllowedUpdates);
         if(!isAllowedUpdates)
         {
             //console.log("entered not allowed");
-            throw new Error("updataes not allowed");
+            throw new Error("updates not allowed");
+           
+        }
+        else{
+            const user= await User.findByIdAndUpdate({_id:userId},data);
+            console.log(user);
+            res.send("user updated successfully!");
         }
         if(data?.skills.length>10)
         {
             throw new Error("update not allowed");
         }
-        const user= await User.findByIdAndUpdate({_id:userId},data);
-        //console.log(user);
-        res.send("user updated successfully!");
+        
     }
     catch(err){
-        res.status(404).send("something went wrong");
+        res.status(404).send("update Failed : "+err.message);
 
     }  
    
