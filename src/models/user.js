@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema({
         type:String,
         default:"this is the default data when about field is empty"
     },
-    skill:{
+    skills:{
         type:[String],
 
     },

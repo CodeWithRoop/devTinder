@@ -74,13 +74,27 @@ app.patch("/user1",async(req,res)=>{
 
 //exploring update record=returnDocument:before
 
-app.patch("/user",async(req,res)=>{
-    const userId= req.body.userId;
+app.patch("/user/:userId",async(req,res)=>{
+    const userId= req.params?.userId;
     const data=req.body;
-
+    console.log(data);
     try{
-        const user= await User.findByIdAndUpdate({_id:userId},data,{returnDocument:"after",});
-        console.log(user);
+
+        const ALLOWED_UPDATES =["skills","about","gender","age"];
+
+        const isAllowedUpdates = Object.keys(data).every((k)=>ALLOWED_UPDATES.includes(k));
+        console.log(isAllowedUpdates);
+        if(!isAllowedUpdates)
+        {
+            //console.log("entered not allowed");
+            throw new Error("updataes not allowed");
+        }
+        if(data?.skills.length>10)
+        {
+            throw new Error("update not allowed");
+        }
+        const user= await User.findByIdAndUpdate({_id:userId},data);
+        //console.log(user);
         res.send("user updated successfully!");
     }
     catch(err){
