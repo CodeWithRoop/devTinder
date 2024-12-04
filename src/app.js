@@ -1,18 +1,50 @@
 const express = require("express");
 const connectDB=require("./config/database");
 const User =require("./models/user");
+const {validateSignUpData} = require("./utils/validation");
+const bcrypt = require("bcrypt");
 const app=express();
 app.use(express.json()); // Its middleware , It Converts JSON to javscript object
 app.post("/signup",async(req,res)=>{
+    try{ 
+    validateSignUpData(req);
     //console.log(req.body);
-    const user = new User(req.body);
+    const {firstName,lastName,emailId,passWord} =req.body;
+    const passWordHash =await bcrypt.hash(passWord,10);
+    const user = new User({firstName,lastName,emailId,passWord:passWordHash});
 
-    try{ await user.save();
-        res.send("user added successfully!");}catch(err){
+await user.save();
+        res.send("user added successfully!");}
+        catch(err){
             res.status(400).send("something went wrong."+err.message);
         }
    
 });
+
+//Login credential authentication
+
+app.post("/login",async (req,res)=>{
+    try{
+        const {emailId,passWord} =req.body;
+        const user = await User.findOne({emailId:emailId});
+        if(!user){
+            throw new Error("Invalid credentials!");
+        }
+
+        const isPassWordValid = await bcrypt.compare(passWord,user.passWord);
+        if(isPassWordValid){
+            res.send("login Successfull!");
+        }
+        else{
+            throw new Error("Invalid Credentials!");
+        }
+
+
+    }catch(err){
+        res.status(400).send("Error:"+err.message);
+    }
+})
+
 
 app.get("/user",async(req,res)=>{
     const userEmail = req.body.emailId;
@@ -62,7 +94,7 @@ app.patch("/user1",async(req,res)=>{
     const data=req.body;
 
     try{
-        await User.findByIdAndUpdate({_id:userId},data);
+        await User.findByIdAndUpdate({_id:userId},data),{returnDocument:"after",runValidator:true};
         res.send("user updated successfully!");
     }
     catch(err){
@@ -71,6 +103,7 @@ app.patch("/user1",async(req,res)=>{
     }  
    
 }) 
+
 
 //exploring update record=returnDocument:before
 

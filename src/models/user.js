@@ -9,13 +9,15 @@ const userSchema = new mongoose.Schema({
     },
     lastName:{
         type:String,
+        required:true,
+        minLength:4,
+        maxLength:50,
     },
-    age:{
+/*     age:{
         type:Number,
         required:true,
         min:18,
-
-    },
+    }, */
     emailId:{
         type:String,
         required:true,
@@ -37,7 +39,7 @@ const userSchema = new mongoose.Schema({
             }
         }
     },
-    gender:{
+/*     gender:{
         type:String,
         required:true,
         validate(value){
@@ -45,7 +47,7 @@ const userSchema = new mongoose.Schema({
                 throw new Error("data not updated")
             }
         }
-    },
+    }, */
     about:{
         type:String,
         default:"this is the default data when about field is empty"
